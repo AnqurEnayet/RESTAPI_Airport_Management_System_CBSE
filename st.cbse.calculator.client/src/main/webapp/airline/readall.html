@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Flights</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; padding: 20px; background-color: #f7f9fc; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #1a237e; text-align: center; }
+        a.back-btn { display: inline-block; margin-bottom: 20px; padding: 10px 20px; font-size: 16px; text-decoration: none; color: white; background-color: #555; border-radius: 5px; }
+        a.back-btn:hover { background-color: #333; }
+        .data-container { margin-top: 20px; }
+        .flight-card { background: #e9f5fe; border-left: 5px solid #3498db; padding: 15px; margin-bottom: 15px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .flight-card h4 { margin: 0 0 10px; color: #1a237e; }
+        .flight-card p { margin: 5px 0; font-size: 14px; }
+        .flight-card span { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="airline.html" class="back-btn">Back to Menu</a>
+        <h1>All Flights</h1>
+        
+        <div id="flights-list" class="data-container">
+            <p>Loading...</p>
+        </div>
+    </div>
+    <script src="readall.js"></script>
+</body>
+</html>

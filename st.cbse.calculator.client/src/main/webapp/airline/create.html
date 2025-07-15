@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Flight</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; padding: 20px; background-color: #f7f9fc; color: #333; }
+        .container { max-width: 600px; margin: 20px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #1a237e; text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="number"], input[type="datetime-local"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { padding: 10px 20px; font-size: 16px; color: white; background-color: #27ae60; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
+        button:hover { background-color: #229954; }
+        a.back-btn { display: inline-block; margin-bottom: 20px; padding: 10px 20px; font-size: 16px; text-decoration: none; color: white; background-color: #555; border-radius: 5px; }
+        a.back-btn:hover { background-color: #333; }
+        #status-message { margin-top: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="airline.html" class="back-btn">Back to Menu</a>
+        <h1>Create a New Flight</h1>
+
+        <form id="createFlightForm">
+            <div class="form-group">
+                <label for="flightNumber">Flight Number:</label>
+                <input type="text" id="flightNumber" required>
+            </div>
+            <div class="form-group">
+                <label for="origin">Origin:</label>
+                <input type="text" id="origin" required>
+            </div>
+            <div class="form-group">
+                <label for="destination">Destination:</label>
+                <input type="text" id="destination" required>
+            </div>
+            <div class="form-group">
+                <label for="departureTime">Departure Time:</label>
+                <input type="datetime-local" id="departureTime" required>
+            </div>
+            <div class="form-group">
+                <label for="arrivalTime">Arrival Time:</label>
+                <input type="datetime-local" id="arrivalTime" required>
+            </div>
+            <div class="form-group">
+                <label for="availableSeats">Available Seats:</label>
+                <input type="number" id="availableSeats" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Price:</label>
+                <input type="number" id="price" step="0.01" required>
+            </div>
+            <button type="submit">Create Flight</button>
+        </form>
+
+        <div id="status-message"></div>
+    </div>
+
+    <script src="create-flight.js"></script>
+
+</body>
+</html>

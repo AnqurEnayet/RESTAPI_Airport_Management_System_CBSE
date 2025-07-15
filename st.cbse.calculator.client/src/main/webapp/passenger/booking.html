@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Flight</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; padding: 20px; background-color: #f7f9fc; color: #333; }
+        .container { max-width: 1000px; margin: 50px auto; text-align: center; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #1a237e; }
+        .back-btn { display: inline-block; padding: 10px 20px; margin-bottom: 20px; font-size: 16px; text-decoration: none; color: white; background-color: #6c757d; border-radius: 5px; transition: background-color 0.3s; }
+        .back-btn:hover { background-color: #5a6268; }
+        .search-form { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .search-form input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .search-btn { padding: 8px 16px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .search-btn:hover { background-color: #2980b9; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; color: #555; font-weight: bold; }
+        .message { margin-top: 20px; text-align: center; font-style: italic; color: #555; }
+        .loading { color: #007bff; }
+        .book-btn { background-color: #28a745; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; transition: background-color 0.3s; }
+        .book-btn:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="passengermenu.html" class="back-btn">Back to Menu</a>
+        <h1>All Available Flights</h1>
+        
+        <form id="searchForm" class="search-form">
+            <input type="text" id="originInput" placeholder="Origin">
+            <input type="text" id="destinationInput" placeholder="Destination">
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+
+        <p id="statusMessage" class="message loading">Loading flights...</p>
+        <table id="flightTable" style="display:none;">
+            <thead>
+                <tr>
+                    <th>Flight No.</th>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>Departure</th>
+                    <th>Price</th>
+                    <th>Available Seats</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <script src="booking.js"></script>
+</body>
+</html>

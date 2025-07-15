@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Booking</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; padding: 20px; background-color: #f7f9fc; color: #333; }
+        .container { max-width: 600px; margin: 50px auto; text-align: center; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #1a237e; }
+        .back-btn { display: inline-block; padding: 10px 20px; margin-bottom: 20px; font-size: 16px; text-decoration: none; color: white; background-color: #6c757d; border-radius: 5px; transition: background-color 0.3s; }
+        .back-btn:hover { background-color: #5a6268; }
+        .flight-details { text-align: left; border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+        .form-group { text-align: left; margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input[type="text"], input[type="number"] { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        .confirm-btn { display: block; width: 100%; margin-top: 20px; padding: 15px; font-size: 18px; text-decoration: none; color: white; background-color: #28a745; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
+        .confirm-btn:hover { background-color: #218838; }
+        .message { margin-top: 15px; padding: 10px; border-radius: 4px; text-align: center; }
+        .error { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="booking.html" class="back-btn">Back to Flights</a>
+        <h1>Confirm Booking</h1>
+        <div id="flightDetails" class="flight-details">
+            <p>Loading flight details...</p>
+        </div>
+        <form id="confirmBookingForm" style="display:none;">
+            <div class="form-group">
+                <label for="passengerName">Passenger Name:</label>
+                <input type="text" id="passengerName" required>
+            </div>
+            <div class="form-group">
+                <label for="numberOfTickets">Number of Tickets:</label>
+                <input type="number" id="numberOfTickets" required min="1">
+            </div>
+            <button type="submit" class="confirm-btn">Confirm Booking</button>
+        </form>
+        <div id="statusMessage" class="message"></div>
+    </div>
+    <script src="confirmbooking.js"></script>
+</body>
+</html>
