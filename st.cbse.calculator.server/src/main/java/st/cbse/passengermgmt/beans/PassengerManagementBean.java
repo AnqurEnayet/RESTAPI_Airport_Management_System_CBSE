@@ -9,6 +9,9 @@ import st.cbse.flightmgmt.interfaces.FlightManagementRemote;
 import st.cbse.passengermgmt.data.Booking;
 import st.cbse.passengermgmt.data.BookingDTO;
 import st.cbse.passengermgmt.interfaces.PassengerManagementRemote;
+// Import the BaggageManagementLocal interface
+import st.cbse.baggagemgmt.interfaces.BaggageManagementLocal;
+
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,14 +23,15 @@ import java.util.stream.Collectors;
 @Stateless
 public class PassengerManagementBean implements PassengerManagementRemote, Serializable {
 
-    // Using default access for consistency with other components.
-    // Note: Best practice is to use 'private' for encapsulation.
     @PersistenceContext
     EntityManager em;
 
-    // Inject the FlightManagement EJB to access and update flight data
     @EJB
     private FlightManagementRemote flightManagement;
+
+    // Inject the BaggageManagement EJB
+    @EJB
+    private BaggageManagementLocal baggageManagement; // ADDED THIS INJECTION
 
     @Override
     public Booking createBooking(Long flightId, String passengerName, int numberOfTickets) {
@@ -47,11 +51,21 @@ public class PassengerManagementBean implements PassengerManagementRemote, Seria
         newBooking.setFlightId(flightId);
         newBooking.setPassengerName(passengerName);
         newBooking.setNumberOfTickets(numberOfTickets);
-        newBooking.setBaggageNumber(UUID.randomUUID().toString().substring(0, 8)); // Generate a random baggage number
+        newBooking.setBaggageNumber(UUID.randomUUID().toString().substring(0, 8).toUpperCase()); // Generate a random baggage number (made it uppercase for better readability)
         newBooking.setBookingDate(LocalDateTime.now());
 
         // Persist the booking to the database
         em.persist(newBooking);
+
+        /* // --- integrated this part in Baggage Management Rest File and Connected With Baggage Drop ---
+        // After successfully creating a booking and assigning a baggage number,
+        // initiate the baggage processing flow in the BaggageManagement component.
+        baggageManagement.startBaggageProcess(
+            newBooking.getBaggageNumber(),
+            flight.getFlightNumber(), // Use flightNumber from FlightDTO
+            newBooking.getPassengerName()
+        );  //ADDED THIS CALL
+        */
 
         // --- TEMPORARILY COMMENTED OUT FOR NOW ---
         // The FlightManagementRemote interface needs to be updated to include the
@@ -83,8 +97,8 @@ public class PassengerManagementBean implements PassengerManagementRemote, Seria
         if (flight != null) {
             dto.setOrigin(flight.getOrigin());
             dto.setDestination(flight.getDestination());
-            dto.setStartTime(flight.getDepartureTime()); // CHANGED: getDepartureTime()
-            dto.setEndTime(flight.getArrivalTime());     // CHANGED: getArrivalTime()
+            dto.setStartTime(flight.getDepartureTime());
+            dto.setEndTime(flight.getArrivalTime());
             
             // Calculate the final price. The FlightDTO's price is a double, so we need to convert it.
             BigDecimal finalPrice = BigDecimal.valueOf(flight.getPrice()).multiply(BigDecimal.valueOf(booking.getNumberOfTickets()));
