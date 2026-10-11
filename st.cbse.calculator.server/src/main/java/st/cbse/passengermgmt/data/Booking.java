@@ -20,6 +20,19 @@ public class Booking implements Serializable {
     private String baggageNumber;
     private LocalDateTime bookingDate;
 
+    // Default constructor for JPA
+    public Booking() {
+    }
+
+    // Constructor for creating new bookings (without ID or bookingDate, which are generated)
+    public Booking(Long flightId, String passengerName, int numberOfTickets, String baggageNumber) {
+        this.flightId = flightId;
+        this.passengerName = passengerName;
+        this.numberOfTickets = numberOfTickets;
+        this.baggageNumber = baggageNumber;
+        this.bookingDate = LocalDateTime.now(); // Set upon creation
+    }
+
     // Getters and Setters
     public Long getBookingId() { return bookingId; }
     public void setBookingId(Long bookingId) { this.bookingId = bookingId; }

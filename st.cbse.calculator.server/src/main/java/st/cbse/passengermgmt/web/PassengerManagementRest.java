@@ -8,8 +8,8 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import st.cbse.passengermgmt.data.Booking;
-import st.cbse.passengermgmt.data.BookingDTO;
+import st.cbse.passengermgmt.data.Booking;    // Keep if Booking is used elsewhere, or remove if not needed.
+import st.cbse.passengermgmt.data.BookingDTO; // Make sure this is imported
 import st.cbse.passengermgmt.interfaces.PassengerManagementRemote;
 
 import java.util.List;
@@ -26,11 +26,13 @@ public class PassengerManagementRest {
     @Produces(MediaType.APPLICATION_JSON)
     public Response bookFlight(BookingDTO bookingDto) {
         try {
-            Booking newBooking = passengerManagement.createBooking(
+            // MODIFIED: Changed the type of 'newBooking' from 'Booking' to 'BookingDTO'
+            BookingDTO newBooking = passengerManagement.createBooking(
                 bookingDto.getFlightId(),
                 bookingDto.getPassengerName(),
                 bookingDto.getNumberOfTickets()
             );
+            // The .entity() method can accept a DTO, so this part is fine.
             return Response.status(Response.Status.CREATED).entity(newBooking).build();
         } catch (IllegalArgumentException | IllegalStateException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();

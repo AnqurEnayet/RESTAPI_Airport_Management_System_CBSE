@@ -13,13 +13,16 @@ import st.cbse.baggagemgmt.interfaces.SortingStationLocal;
 import st.cbse.baggagemgmt.interfaces.CbrStationLocal;
 import st.cbse.baggagemgmt.interfaces.LoadingStationLocal;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.EnumSet;
+import java.time.LocalDateTime; // No change in import, but used in Baggage for timestamping
+import java.util.ArrayList;   // ADDED: Import ArrayList for getAllBaggage
+import java.util.Collections; // REMOVED: Not needed anymore for EnumSet
+import java.util.EnumSet;     // REMOVED: Not needed anymore for EnumSet
+import java.util.List;        // ADDED: Import List for new methods
 import java.util.Map;
-import java.util.Set;
+import java.util.Set;         // REMOVED: Not needed anymore for EnumSet
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
+import java.util.stream.Collectors; // ADDED: For stream operations in search method
 
 @Singleton
 @Lock(LockType.READ) // Default to READ lock for general access
@@ -43,6 +46,14 @@ public class ProcessControlBean implements BaggageManagementLocal {
     // Using ConcurrentHashMap for thread-safe access
     private final Map<String, Baggage> activeBaggage = new ConcurrentHashMap<>();
 
+    // REMOVED: The REQUIRED_STATIONS set is no longer needed for this simplified completion check
+    // private static final Set<BaggageStatus> REQUIRED_STATIONS = Collections.unmodifiableSet(EnumSet.of(
+    //     BaggageStatus.SECURITY_CLEARED,
+    //     BaggageStatus.SORTING_COMPLETED,
+    //     BaggageStatus.CBR_CLEARED,
+    //     BaggageStatus.LOADED_ON_PLANE
+    // ));
+
     @Lock(LockType.WRITE) // Use WRITE lock for state-modifying operations
     @Override
     public String startBaggageProcess(String baggageNumber, String flightNumber, String passengerName) {
@@ -56,6 +67,7 @@ public class ProcessControlBean implements BaggageManagementLocal {
         LOGGER.info("Baggage " + baggageNumber + " (Flight: " + flightNumber + ") dropped off. Starting process.");
 
         // Initiate the first transport to Security Station
+        // Baggage's constructor already sets AT_DROP_OFF, and setCurrentStatus adds to history.
         newBaggage.setCurrentStatus(BaggageStatus.IN_TRANSPORT_TO_SECURITY);
         transportService.startTransport(newBaggage, BaggageStatus.AT_SECURITY_CHECK); // Tell transport where it's going next
 
@@ -71,6 +83,30 @@ public class ProcessControlBean implements BaggageManagementLocal {
         return baggage;
     }
 
+    // ADDED: Implementation for BaggageManagementLocal.getAllBaggage()
+    @Override
+    public List<Baggage> getAllBaggage() {
+        // Return a new ArrayList to avoid ConcurrentModificationException if activeBaggage is modified
+        // while iterating elsewhere, and to prevent external modification of the internal map.
+        return new ArrayList<>(activeBaggage.values());
+    }
+
+    // ADDED: Implementation for BaggageManagementLocal.searchBaggageByFlightAndPassenger()
+    @Override
+    public List<Baggage> searchBaggageByFlightAndPassenger(String flightNumber, String passengerName) {
+        return activeBaggage.values().stream()
+                .filter(baggage -> {
+                    // Check if flightNumber matches (case-insensitive, partial match) or if filter is empty
+                    boolean matchesFlight = (flightNumber == null || flightNumber.isEmpty()) ||
+                                            (baggage.getFlightNumber() != null && baggage.getFlightNumber().toLowerCase().contains(flightNumber.toLowerCase()));
+                    // Check if passengerName matches (case-insensitive, partial match) or if filter is empty
+                    boolean matchesPassenger = (passengerName == null || passengerName.isEmpty()) ||
+                                               (baggage.getPassengerName() != null && baggage.getPassengerName().toLowerCase().contains(passengerName.toLowerCase()));
+                    return matchesFlight && matchesPassenger;
+                })
+                .collect(Collectors.toList());
+    }
+
     @Lock(LockType.WRITE)
     @Override
     public void notifyBaggageArrival(String baggageNumber, String stationName) {
@@ -83,6 +119,7 @@ public class ProcessControlBean implements BaggageManagementLocal {
         LOGGER.info("Baggage " + baggageNumber + " arrived at " + stationName + ". Current status: " + baggage.getCurrentStatus());
 
         // Based on where it arrived, direct it to the next step
+        // setCurrentStatus methods internally update the statusHistory
         switch (stationName) {
             case "AT_SECURITY_CHECK":
                 baggage.setCurrentStatus(BaggageStatus.AT_SECURITY_CHECK);
@@ -119,6 +156,7 @@ public class ProcessControlBean implements BaggageManagementLocal {
         LOGGER.info("Baggage " + baggageNumber + " completed processing at " + stationName + ".");
 
         // Based on which station completed, direct to next transport or final step
+        // setCurrentStatus methods internally update the statusHistory
         switch (stationName) {
             case "SECURITY_CLEARED":
                 baggage.setCurrentStatus(BaggageStatus.SECURITY_CLEARED);

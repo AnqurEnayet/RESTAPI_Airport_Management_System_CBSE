@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baggage Manager Menu</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #eef1f5;
+            color: #333;
+        }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        .option-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+        .option-list li {
+            margin-bottom: 15px;
+        }
+        .option-list a {
+            display: block;
+            padding: 15px 25px;
+            background-color: #4a90e2;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .option-list a:hover {
+            background-color: #357ABD;
+            transform: translateY(-2px);
+        }
+        .back-link {
+            margin-top: 40px;
+            font-size: 1em;
+        }
+        .back-link a {
+            color: #4a90e2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Baggage Manager Options</h1>
+        <ul class="option-list">
+            <li><a href="baggage_status.html">View Baggage Status</a></li>
+        </ul>
+        <p class="back-link"><a href="administrator.html">← Back to Administrator Dashboard</a></p>
+    </div>
+</body>
+</html>

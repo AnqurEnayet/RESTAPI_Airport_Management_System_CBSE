@@ -18,6 +18,25 @@ public class BookingDTO implements Serializable {
     private LocalDateTime endTime;
     private BigDecimal finalPrice;
 
+    // Default no-argument constructor (REQUIRED for DTOs often used in JAX-RS/JSON)
+    public BookingDTO() {
+    }
+
+    // ADDED: Constructor to convert a Booking entity to a BookingDTO
+    public BookingDTO(Booking booking) {
+        if (booking != null) {
+            this.bookingId = booking.getBookingId();
+            this.flightId = booking.getFlightId();
+            this.passengerName = booking.getPassengerName();
+            this.numberOfTickets = booking.getNumberOfTickets();
+            this.baggageNumber = booking.getBaggageNumber();
+            // Note: Flight details (origin, destination, etc.) are populated by convertToDTO
+            // because they require fetching data from another EJB (FlightManagement).
+            // A DTO constructor should ideally not have such dependencies.
+        }
+    }
+
+
     // Getters and setters for existing fields
     public Long getBookingId() {
         return bookingId;

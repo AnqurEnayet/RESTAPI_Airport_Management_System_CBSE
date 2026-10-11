@@ -19,16 +19,16 @@ If you work in and start the server in Eclipse (maven run configuration with the
 
 ## Access to the Web Interface
 
+1. Run the server
+
+2. python -m http.server 
+
 FRONTEND: "http://localhost:8000/mainmenu.html"
 
-1. Run the server
+
 
 USE THIS AS THE LINK NOW (PostMan Check)
 This should be similar for everyone: "http://localhost:8080/st.cbse.logisticscenter.server/rest-api/"
 Example: "http://localhost:8080/st.cbse.logisticscenter.server/rest-api/flights/all"
 
 
-
-
-# 2. Run the client to fill the server database with some results
-# 3. Call `http://localhost:8080/st.cbse.calculator.server/rest-api/calculator/result` in a web browser.

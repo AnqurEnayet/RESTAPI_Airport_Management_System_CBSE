@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baggage Status Overview</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef1f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #333;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 1000px;
+            box-sizing: border-box;
+        }
+        .back-to-menu-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6c757d; /* Gray button */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-bottom: 25px;
+        }
+        .back-to-menu-button:hover {
+            background-color: #5a6268;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        .message {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .search-container {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping for smaller screens */
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+        .search-container input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+            flex: 1; /* Allow inputs to grow */
+            min-width: 150px;
+        }
+        .search-container button {
+            padding: 10px 18px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        .search-container button:hover {
+            background-color: #357ABD;
+        }
+        .search-container button#resetSearchBtn {
+            background-color: #6c757d;
+        }
+        .search-container button#resetSearchBtn:hover {
+            background-color: #5a6268;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow-x: auto; /* Enable horizontal scrolling for tables */
+            display: block; /* Required for overflow-x to work */
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            white-space: nowrap; /* Prevent text wrapping in table cells */
+        }
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #555;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .no-records {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #777;
+            display: none;
+        }
+        .action-buttons button {
+            padding: 8px 12px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+        .action-buttons .inspect-btn {
+            background-color: #17a2b8; /* Info blue */
+            color: white;
+        }
+        .action-buttons .inspect-btn:hover {
+            background-color: #138496;
+        }
+        .back-link {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 1em;
+        }
+        .back-link a {
+            color: #4a90e2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="baggagemanagermenu.html" class="back-to-menu-button">Back to Baggage Manager Menu</a>
+        <h1>Baggage Status Overview</h1>
+        <div id="message-area" class="message"></div>
+
+        <div class="search-container">
+            <input type="text" id="searchBaggageId" placeholder="Search by Baggage ID">
+            <input type="text" id="searchBookingId" placeholder="Search by Booking ID">
+            <input type="text" id="searchStatus" placeholder="Search by Status">
+            <button id="searchBaggageBtn">Search</button>
+            <button id="resetSearchBtn">Reset</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Baggage ID</th>
+                    <th>Booking ID</th>
+                    <th>Weight (kg)</th>
+                    <th>Status</th>
+                    <th>Last Location</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="baggageTableBody">
+                </tbody>
+        </table>
+        <p id="noBaggageMessage" class="no-records">No baggage records found.</p>
+
+        <p class="back-link"><a href="baggagemanagermenu.html">← Back to Baggage Manager Menu</a></p>
+    </div>
+    <script src="baggage_status.js"></script>
+</body>
+</html>

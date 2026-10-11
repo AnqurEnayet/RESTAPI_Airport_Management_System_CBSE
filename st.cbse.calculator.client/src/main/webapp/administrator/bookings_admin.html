@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Booking Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef1f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #333;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 1200px; /* Increased max-width for more columns */
+            box-sizing: border-box;
+        }
+        .back-to-menu-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6c757d; /* Gray button */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-bottom: 25px;
+        }
+        .back-to-menu-button:hover {
+            background-color: #5a6268;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        .message {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .search-container {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping for smaller screens */
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+        .search-container input[type="text"],
+        .search-container input[type="number"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+            flex: 1; /* Allow inputs to grow */
+            min-width: 150px;
+        }
+        .search-container button {
+            padding: 10px 18px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        .search-container button:hover {
+            background-color: #357ABD;
+        }
+        .search-container button#resetSearchBtn {
+            background-color: #6c757d;
+        }
+        .search-container button#resetSearchBtn:hover {
+            background-color: #5a6268;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow-x: auto; /* Enable horizontal scrolling for tables */
+            display: block; /* Required for overflow-x to work */
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            word-wrap: break-word; /* Prevent long texts from breaking layout */
+            white-space: nowrap; /* Prevent wrapping in table cells */
+        }
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #555;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .no-records {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #777;
+            display: none;
+        }
+        .action-buttons button {
+            padding: 8px 12px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+        .action-buttons .edit-btn {
+            background-color: #ffc107;
+            color: white;
+        }
+        .action-buttons .edit-btn:hover {
+            background-color: #e0a800;
+        }
+        .action-buttons .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .action-buttons .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* Form for update */
+        #bookingForm {
+            background-color: #f9f9f9;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border: 1px solid #eee;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+        }
+        #bookingForm .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        #bookingForm .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+            font-size: 0.95em;
+        }
+        #bookingForm .form-group input[type="text"],
+        #bookingForm .form-group input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9em;
+            box-sizing: border-box;
+        }
+        #bookingForm .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        #bookingForm .button-group button {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: bold;
+            color: white; /* Added for consistency */
+        }
+        #bookingForm .button-group button#submitBookingBtn {
+            background-color: #28a745;
+        }
+        #bookingForm .button-group button#submitBookingBtn:hover {
+            background-color: #218838;
+        }
+        #bookingForm .button-group button#clearFormBtn {
+            background-color: #6c757d;
+        }
+        #bookingForm .button-group button#clearFormBtn:hover {
+            background-color: #5a6268;
+        }
+        .back-link {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 1em;
+        }
+        .back-link a {
+            color: #4a90e2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="businessmanagermenu.html" class="back-to-menu-button">Back to Business Manager Menu</a>
+        <h1>Passenger Booking History</h1>
+        <div id="message-area" class="message"></div>
+
+        <div class="search-container">
+            <input type="text" id="searchPassengerName" placeholder="Search by Passenger Name">
+            <input type="number" id="searchFlightId" placeholder="Search by Flight ID">
+            <button id="searchBookingsBtn">Search</button>
+            <button id="resetSearchBtn">Reset</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Passenger Name</th>
+                    <th>Flight ID</th>
+                    <th>Flight Number</th>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Time</th>
+                    <th>Tickets</th>
+                    <th>Baggage No.</th>
+                    <th>Final Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="bookingsTableBody">
+                </tbody>
+        </table>
+        <p id="noBookingsMessage" class="no-records">No bookings found.</p>
+
+        <h2>Update Booking</h2>
+        <form id="bookingForm">
+            <input type="hidden" id="bookingId">
+            <div class="form-group">
+                <label for="passengerName">Passenger Name:</label>
+                <input type="text" id="passengerName" name="passengerName" required>
+            </div>
+            <div class="form-group">
+                <label for="flightId">Flight ID:</label>
+                <input type="number" id="flightId" name="flightId" required>
+            </div>
+            <div class="form-group">
+                <label for="numberOfTickets">Number of Tickets:</label>
+                <input type="number" id="numberOfTickets" name="numberOfTickets" required min="1">
+            </div>
+            <div class="form-group">
+                <label for="baggageNumber">Baggage Number (Optional):</label>
+                <input type="text" id="baggageNumber" name="baggageNumber">
+            </div>
+            <div class="button-group">
+                <button type="submit" id="submitBookingBtn">Update Booking</button>
+                <button type="button" id="clearFormBtn">Clear Form</button>
+            </div>
+        </form>
+
+        <p class="back-link"><a href="businessmanagermenu.html">← Back to Business Manager Menu</a></p>
+    </div>
+    <script src="bookings_admin.js"></script>
+</body>
+</html>
